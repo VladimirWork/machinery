@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from keras import models
+from keras import layers
 
 
 def vectorize_sequences(sequences, dimension=10000):
@@ -27,4 +29,9 @@ def normalize(train_data, test_data):
 
 
 def build_model():
-    pass
+    model = models.Sequential()
+    model.add(layers.Dense(64, activation='relu', input_shape=(13,)))
+    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(1))
+    model.compile(optimizer='rmsprop', loss='mse', metrics=['mae'])
+    return model
