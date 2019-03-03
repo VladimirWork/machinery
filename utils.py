@@ -14,3 +14,17 @@ def plotter(history_dict):
     frame = pd.DataFrame.from_dict(history_dict)
     frame.plot(subplots=True, cmap='cool')
     plt.show()
+
+
+def normalize(train_data, test_data):
+    mean = train_data.mean(axis=0)
+    std = train_data.std(axis=0)
+    train_data -= mean
+    train_data /= std
+    test_data -= mean
+    test_data /= test_data
+    return train_data, test_data
+
+
+def build_model():
+    pass
