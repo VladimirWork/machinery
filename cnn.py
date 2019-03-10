@@ -2,6 +2,7 @@ import os
 import shutil
 from keras import layers, models, optimizers
 from keras.preprocessing.image import ImageDataGenerator
+from utils import plotter
 
 original_dataset_dir = 'C:\\Users\\admin\\Downloads\\train'
 base_dir = 'C:\\Users\\admin\\Downloads\\cnn_base_dir'
@@ -62,7 +63,7 @@ def setup():
 
 
 # run only once
-setup()
+# setup()
 
 model = models.Sequential()
 model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)))
@@ -81,6 +82,15 @@ model.compile(optimizer=optimizers.RMSprop(lr=1e-4), loss='binary_crossentropy',
 train_data_gen = ImageDataGenerator(rescale=1./255)
 test_data_gen = ImageDataGenerator(rescale=1./255)
 
-train_gen = train_data_gen.flow_from_directory(train_dir, target_size=(150, 150), batch_size=20, class_mode='binary')
-validation_gen = test_data_gen.flow_from_directory(validation_dir, target_size=(150, 150), batch_size=20,
-                                                   class_mode='binary')
+train_generator = train_data_gen.flow_from_directory(train_dir, target_size=(150, 150), batch_size=20,
+                                                     class_mode='binary')
+validation_generator = test_data_gen.flow_from_directory(validation_dir, target_size=(150, 150), batch_size=20,
+                                                         class_mode='binary')
+
+history = model.fit_generator(train_generator,
+                              steps_per_epoch=100,
+                              epochs=30,
+                              validation_data=validation_generator,
+                              validation_steps=50)
+model.save('cats_and_dogs_1.h5')
+plotter(history.history)
