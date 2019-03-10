@@ -82,4 +82,5 @@ train_data_gen = ImageDataGenerator(rescale=1./255)
 test_data_gen = ImageDataGenerator(rescale=1./255)
 
 train_gen = train_data_gen.flow_from_directory(train_dir, target_size=(150, 150), batch_size=20, class_mode='binary')
-test_gen = train_data_gen.flow_from_directory(test_dir, target_size=(150, 150), batch_size=20, class_mode='binary')
+validation_gen = test_data_gen.flow_from_directory(validation_dir, target_size=(150, 150), batch_size=20,
+                                                   class_mode='binary')
