@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from keras import models
-from keras import layers
+from keras import models, layers
 
 
 def vectorize_sequences(sequences, dimension=10000):

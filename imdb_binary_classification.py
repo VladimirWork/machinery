@@ -1,6 +1,5 @@
 from keras.datasets import imdb
-from keras import models
-from keras import layers
+from keras import models, layers
 import numpy as np
 from utils import vectorize_sequences, plotter
 

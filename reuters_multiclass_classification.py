@@ -1,6 +1,5 @@
 from keras.datasets import reuters
-from keras import models
-from keras import layers
+from keras import models, layers
 from keras.utils.np_utils import to_categorical
 from utils import vectorize_sequences, plotter
 

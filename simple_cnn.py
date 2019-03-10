@@ -1,5 +1,4 @@
-from keras import layers
-from keras import models
+from keras import layers, models
 from keras.datasets import mnist
 from keras.utils import to_categorical
 
