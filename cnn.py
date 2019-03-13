@@ -3,6 +3,8 @@ import shutil
 from keras import layers, models, optimizers
 from keras.preprocessing.image import ImageDataGenerator
 from utils import plotter
+import time
+
 
 original_dataset_dir = 'C:\\Users\\admin\\Downloads\\train'
 base_dir = 'C:\\Users\\admin\\Downloads\\cnn_base_dir'
@@ -75,22 +77,36 @@ model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Conv2D(128, (3, 3), activation='relu'))
 model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Flatten())
+model.add(layers.Dropout(0.5))
 model.add(layers.Dense(512, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
-model.compile(optimizer=optimizers.RMSprop(lr=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=optimizers.RMSprop(lr=1e-4),
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
 
-train_data_gen = ImageDataGenerator(rescale=1./255)
+train_data_gen = ImageDataGenerator(rescale=1./255,
+                                    rotation_range=40,
+                                    width_shift_range=0.2,
+                                    height_shift_range=0.2,
+                                    shear_range=0.2,
+                                    zoom_range=0.2,
+                                    horizontal_flip=True)
 test_data_gen = ImageDataGenerator(rescale=1./255)
 
-train_generator = train_data_gen.flow_from_directory(train_dir, target_size=(150, 150), batch_size=20,
+train_generator = train_data_gen.flow_from_directory(train_dir,
+                                                     target_size=(150, 150),
+                                                     batch_size=64,
                                                      class_mode='binary')
-validation_generator = test_data_gen.flow_from_directory(validation_dir, target_size=(150, 150), batch_size=20,
+validation_generator = test_data_gen.flow_from_directory(validation_dir,
+                                                         target_size=(150, 150),
+                                                         batch_size=64,
                                                          class_mode='binary')
 
 history = model.fit_generator(train_generator,
                               steps_per_epoch=100,
-                              epochs=30,
+                              epochs=100,
                               validation_data=validation_generator,
                               validation_steps=50)
-model.save('cats_and_dogs_1.h5')
+# model.save('cats_and_dogs_{}.h5'.format(time.time()))
+model.save('cats_and_dogs_2.h5')
 plotter(history.history)
