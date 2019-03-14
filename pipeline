@@ -1,3 +1,4 @@
 data preparation (vectorization -> normalization -> absent values handling)
 feature engineering
 overfitting and underfitting issues (model reduction -> regularization (L1, L2) -> dropout)
+pre-trained models (feature extraction -> fine tuning)

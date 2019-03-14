@@ -104,7 +104,7 @@ validation_generator = test_data_gen.flow_from_directory(validation_dir,
 
 history = model.fit_generator(train_generator,
                               steps_per_epoch=100,
-                              epochs=100,
+                              epochs=50,
                               validation_data=validation_generator,
                               validation_steps=50)
 # model.save('cats_and_dogs_{}.h5'.format(time.time()))
