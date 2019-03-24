@@ -1,0 +1,48 @@
+from keras import utils, models, layers, optimizers
+import numpy as np
+import random
+import sys
+
+
+path = utils.get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
+text = open(path).read().lower()
+print('Corpus length: {}'.format(len(text)))
+
+# 60 symbols sequences
+max_len = 60
+# new sequence after each 3 symbols
+step = 3
+# store extracted sequences
+sentences = []
+# store targets (symbols right after sequences)
+next_chars = []
+
+for i in range(0, len(text)-max_len, step):
+    sentences.append(text[i:i+max_len])
+    next_chars.append(text[i+max_len])
+print('Number of sequences: {}'.format(len(sentences)))
+
+# unique symbols list
+chars = sorted(list(set(text)))
+print('Number of unique characters: {}'.format(len(chars)))
+# map unique characters to indices in list
+char_indices = dict((char, chars.index(char)) for char in chars)
+
+# vectorization
+x = np.zeros((len(sentences), max_len, len(chars)), dtype=np.bool)
+y = np.zeros((len(sentences), len(chars)), dtype=np.bool)
+
+# direct symbols encoding into binary arrays
+for i, sentence in enumerate(sentences):
+    for t, char in enumerate(sentence):
+        x[i, t, char_indices[char]] = 1
+        y[i, char_indices[next_chars[i]]] = 1
+
+model = models.Sequential()
+model.add(layers.LSTM(128, input_shape=(max_len, len(chars))))
+model.add(layers.Dense(len(chars), activation='softmax'))
+optimizer = optimizers.RMSprop(lr=0.01)
+model.compile(loss='categorical_crossentropy', optimizer=optimizer)
+
+# text generation loop
+# TO DO
