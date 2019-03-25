@@ -2,6 +2,7 @@ from keras import utils, models, layers, optimizers
 import numpy as np
 import random
 import sys
+from utils import sample
 
 
 path = utils.get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
@@ -17,9 +18,9 @@ sentences = []
 # store targets (symbols right after sequences)
 next_chars = []
 
-for i in range(0, len(text)-max_len, step):
-    sentences.append(text[i:i+max_len])
-    next_chars.append(text[i+max_len])
+for i in range(0, len(text) - max_len, step):
+    sentences.append(text[i:i + max_len])
+    next_chars.append(text[i + max_len])
 print('Number of sequences: {}'.format(len(sentences)))
 
 # unique symbols list
@@ -45,4 +46,20 @@ optimizer = optimizers.RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 # text generation loop
-# TO DO
+for epoch in range(1, 20):
+    print('Epoch: {}'.format(epoch))
+    model.fit(x, y, batch_size=2048, epochs=1)
+    start_index = random.randint(0, len(text) - max_len - 1)
+    generated_text = text[start_index: start_index + max_len]
+    print('Generating with seed: "{}"\n'.format(generated_text))
+    sys.stdout.write(generated_text)
+    for i in range(400):
+        sampled = np.zeros((1, max_len, len(chars)))
+        for t, char in enumerate(generated_text):
+            sampled[0, t, char_indices[char]] = 1.
+        preds = model.predict(sampled, verbose=0)[0]
+        next_index = sample(preds, 0.5)
+        next_char = chars[next_index]
+        generated_text += next_char
+        generated_text = generated_text[1:]
+        sys.stdout.write(next_char)
