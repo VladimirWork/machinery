@@ -47,11 +47,11 @@ model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 # text generation loop
 for epoch in range(1, 20):
-    print('Epoch: {}'.format(epoch))
+    print('\nEpoch: {}\n'.format(epoch))
     model.fit(x, y, batch_size=2048, epochs=1)
     start_index = random.randint(0, len(text) - max_len - 1)
     generated_text = text[start_index: start_index + max_len]
-    print('Generating with seed: "{}"\n'.format(generated_text))
+    print('\nGenerating with seed: "{}"\n'.format(generated_text))
     sys.stdout.write(generated_text)
     for i in range(400):
         sampled = np.zeros((1, max_len, len(chars)))
