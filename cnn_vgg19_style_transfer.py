@@ -118,11 +118,11 @@ for i in range(iterations):
                                      x,
                                      fprime=evaluator.grads,
                                      maxfun=20)
-    print('Current loss value:', min_val)
+    print('Current loss value: {}'.format(min_val))
     img = x.copy().reshape((img_height, img_width, 3))
     img = deprocess_image(img)
     fname = result_prefix + '_at_iteration_{}.png'.format(i)
     imsave(fname, img)
-    print('Image saved as', fname)
+    print('Image saved as {}'.format(fname))
     end_time = time.time()
     print('Iteration {} completed in {}'.format(i, end_time - start_time))
