@@ -8,17 +8,17 @@ import time
 import numpy as np
 
 
-target_image_path = ''
-style_image_path = ''
+target_image_path = 'C:\\Users\\admin\\Downloads\\blagoveshhenskij-sobor-voronezh-min-e1498909085781.jpg'
+style_image_path = 'C:\\Users\\admin\\Downloads\\1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'
 
 width, height = load_img(target_image_path).size
 img_height = 400
 img_width = int(width * img_height / height)
 
 # 1 target image for style applying
-target_image = K.constant(preprocess_image(target_image_path))
+target_image = K.constant(preprocess_image(target_image_path, img_height, img_width))
 # 2 style reference image
-style_image = K.constant(preprocess_image(style_image_path))
+style_image = K.constant(preprocess_image(style_image_path, img_height, img_width))
 # 3 placeholder tensor for result image
 combination_image = K.placeholder((1, img_height, img_width, 3))
 
@@ -107,7 +107,7 @@ evaluator = Evaluator()
 
 result_prefix = 'figures/my_result'
 iterations = 20
-x = preprocess_image(target_image_path)
+x = preprocess_image(target_image_path, img_height, img_width)
 x = x.flatten()
 
 # style transfer cycle

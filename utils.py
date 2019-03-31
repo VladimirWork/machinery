@@ -53,10 +53,7 @@ def sample(preds, temperature=1.0):
     return np.argmax(probas)
 
 
-def preprocess_image(image_path):
-    width, height = load_img(image_path).size
-    img_height = 400
-    img_width = int(width * img_height / height)
+def preprocess_image(image_path, img_height, img_width):
     img = load_img(image_path, target_size=(img_height, img_width))
     img = img_to_array(img)
     img = np.expand_dims(img, axis=0)
