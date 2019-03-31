@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from keras import models, layers
+from keras.applications import vgg19
+from keras.preprocessing.image import load_img, img_to_array
 
 
 def vectorize_sequences(sequences, dimension=10000):
@@ -49,3 +51,24 @@ def sample(preds, temperature=1.0):
     preds = exp_preds / np.sum(exp_preds)
     probas = np.random.multinomial(1, preds, 1)
     return np.argmax(probas)
+
+
+def preprocess_image(image_path):
+    width, height = load_img(image_path).size
+    img_height = 400
+    img_width = int(width * img_height / height)
+    img = load_img(image_path, target_size=(img_height, img_width))
+    img = img_to_array(img)
+    img = np.expand_dims(img, axis=0)
+    img = vgg19.preprocess_input(img)
+    return img
+
+
+def deprocess_image(x):
+    # some dark magic for image deprocessing
+    x[:, :, 0] += 103.939
+    x[:, :, 1] += 116.779
+    x[:, :, 2] += 123.68
+    x = x[:, :, ::-1]
+    x = np.clip(x, 0, 255).astype('uint8')
+    return x
