@@ -1,6 +1,7 @@
 import keras
 from keras import models, layers, backend as K
 import numpy as np
+from keras.utils import plot_model
 
 
 img_shape = (28, 28, 1)
@@ -31,11 +32,22 @@ def sampling(args):
 
 z = layers.Lambda(sampling)([z_mean, z_log_var])
 
+# instantiate encoder model
+encoder = models.Model(input_img, [z_mean, z_log_var, z], name='encoder')
+encoder.summary()
+plot_model(encoder, to_file='vae_cnn_encoder.png', show_shapes=True)
+
+
 # decoder
 decoder_input = layers.Input(K.int_shape(z)[1:])
 x = layers.Dense(np.prod(shape_before_flattening[1:]), activation='relu')(decoder_input)
 x = layers.Reshape(shape_before_flattening[1:])(x)
 x = layers.Conv2DTranspose(32, 3, padding='same', activation='relu', strides=(2, 2))(x)
 x = layers.Conv2D(1, 3, padding='same', activation='sigmoid')(x)
-decoder = models.Model(decoder_input, x)
+
+# instantiate decoder model
+decoder = models.Model(decoder_input, x, name='decoder')
+decoder.summary()
+plot_model(decoder, to_file='vae_cnn_decoder.png', show_shapes=True)
+
 z_decoded = decoder(z)
