@@ -3,6 +3,7 @@ import numpy as np
 import random
 import sys
 from utils import sample
+from vk_connector import main
 
 
 path = utils.get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
@@ -46,14 +47,15 @@ optimizer = optimizers.RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 # text generation loop
-for epoch in range(1, 20):
+for epoch in range(1, 5):
     print('\nEpoch: {}\n'.format(epoch))
     model.fit(x, y, batch_size=2048, epochs=1)
     start_index = random.randint(0, len(text) - max_len - 1)
     generated_text = text[start_index: start_index + max_len]
     print('\nGenerating with seed: "{}"\n'.format(generated_text))
-    sys.stdout.write(generated_text)
-    for i in range(400):
+    result = generated_text
+    # sys.stdout.write(generated_text)
+    for i in range(800):
         sampled = np.zeros((1, max_len, len(chars)))
         for t, char in enumerate(generated_text):
             sampled[0, t, char_indices[char]] = 1.
@@ -62,4 +64,6 @@ for epoch in range(1, 20):
         next_char = chars[next_index]
         generated_text += next_char
         generated_text = generated_text[1:]
-        sys.stdout.write(next_char)
+        result += next_char
+        # sys.stdout.write(next_char)
+    main(result, 'C:\\Users\\admin\\Downloads\\flowers.jpg')

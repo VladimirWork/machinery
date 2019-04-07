@@ -8,11 +8,14 @@ import time
 import numpy as np
 
 
-target_image_path = 'C:\\Users\\admin\\Downloads\\blagoveshhenskij-sobor-voronezh-min-e1498909085781.jpg'
+# target_image_path = 'C:\\Users\\admin\\Downloads\\blagoveshhenskij-sobor-voronezh-min-e1498909085781.jpg'
+target_image_path = 'C:\\Users\\admin\\Downloads\\56R_GovTRFo.jpg'
 # style_image_path = 'C:\\Users\\admin\\Downloads\\1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'
 # style_image_path = 'C:\\Users\\admin\\Downloads\\Claude_Monet,_Impression,_soleil_levant.jpg'
 # style_image_path = 'C:\\Users\\admin\\Downloads\\00-edvard-munch-the-scream-1893.jpg'
-style_image_path = 'C:\\Users\\admin\\Downloads\\flowers.jpg'
+# style_image_path = 'C:\\Users\\admin\\Downloads\\flowers.jpg'
+# style_image_path = 'C:\\Users\\admin\\Downloads\\utopia_yellow_style.jpg'
+style_image_path = 'C:\\Users\\admin\\Downloads\\magenta_astronaut_style.jpg'
 
 width, height = load_img(target_image_path).size
 img_height = 400
@@ -108,8 +111,8 @@ class Evaluator:
 
 evaluator = Evaluator()
 
-result_prefix = 'figures/flowers_vs_vrn'
-iterations = 5
+result_prefix = 'figures/magenta_vs_photo'
+iterations = 10
 x = preprocess_image(target_image_path, img_height, img_width)
 x = x.flatten()
 
