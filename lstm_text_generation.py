@@ -47,7 +47,7 @@ optimizer = optimizers.RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 # text generation loop
-for epoch in range(1, 5):
+for epoch in range(1, 50):
     print('\nEpoch: {}\n'.format(epoch))
     model.fit(x, y, batch_size=2048, epochs=1)
     start_index = random.randint(0, len(text) - max_len - 1)
@@ -66,4 +66,6 @@ for epoch in range(1, 5):
         generated_text = generated_text[1:]
         result += next_char
         # sys.stdout.write(next_char)
-    main(result, 'C:\\Users\\admin\\Downloads\\flowers.jpg')
+
+    if epoch > 40:
+        main(result, 'C:\\Users\\admin\\Downloads\\forest.jpg')

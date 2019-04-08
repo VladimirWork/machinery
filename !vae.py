@@ -8,7 +8,7 @@ from scipy.stats import norm
 
 
 img_shape = (28, 28, 1)
-batch_size = 256
+batch_size = 16
 latent_dim = 2
 
 # encoder
@@ -91,7 +91,7 @@ vae.fit(x=x_train,
         batch_size=batch_size,
         validation_data=(x_test, None))
 
-n = 15
+n = 25
 digit_size = 28
 figure = np.zeros((digit_size * n, digit_size * n))
 grid_x = norm.ppf(np.linspace(0.05, 0.95, n))
