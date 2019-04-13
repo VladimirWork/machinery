@@ -9,7 +9,8 @@ import numpy as np
 
 
 # target_image_path = 'C:\\Users\\admin\\Downloads\\blagoveshhenskij-sobor-voronezh-min-e1498909085781.jpg'
-target_image_path = 'C:\\Users\\admin\\Downloads\\56R_GovTRFo.jpg'
+# target_image_path = 'C:\\Users\\admin\\Downloads\\56R_GovTRFo.jpg'
+target_image_path = ''
 # style_image_path = 'C:\\Users\\admin\\Downloads\\1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg'
 # style_image_path = 'C:\\Users\\admin\\Downloads\\Claude_Monet,_Impression,_soleil_levant.jpg'
 # style_image_path = 'C:\\Users\\admin\\Downloads\\00-edvard-munch-the-scream-1893.jpg'
