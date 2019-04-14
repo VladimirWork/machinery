@@ -34,7 +34,7 @@ def auc(model, x_train, x_test, y_train, y_test):
 
 if __name__ == '__main__':
     data = pd.read_csv('C:\\Users\\admin\\Downloads\\flights.csv')
-    data = data.sample(frac=0.01, random_state=10)
+    data = data.sample(frac=0.1, random_state=10)
     data = data[["MONTH", "DAY", "DAY_OF_WEEK", "AIRLINE", "FLIGHT_NUMBER", "DESTINATION_AIRPORT",
                  "ORIGIN_AIRPORT", "AIR_TIME", "DEPARTURE_TIME", "DISTANCE", "ARRIVAL_DELAY"]]
     data.dropna(inplace=True)
@@ -50,14 +50,14 @@ if __name__ == '__main__':
                                                         test_size=0.25)
 
     xgb_instance = GeneralClassifier(xgboost.XGBClassifier(),
-                                     {'max_depth': [10],
-                                      'min_child_weight': [6],
+                                     {'max_depth': [5, 10, 15],
+                                      'min_child_weight': [3, 6, 9],
                                       'n_estimators': [200],
-                                      'learning_rate': [0.05]})(x_train, y_train)
+                                      'learning_rate': [0.05, 0.1, 0.2]})(x_train, y_train)
     cb_instance = GeneralClassifier(catboost.CatBoostClassifier(),
-                                    {'depth': [10],
-                                     'learning_rate': [0.1],
-                                     'l2_leaf_reg': [9],
+                                    {'depth': [5, 10, 15],
+                                     'learning_rate': [0.05, 0.1, 0.2],
+                                     'l2_leaf_reg': [3, 6, 9],
                                      'iterations': [200]})(x_train, y_train)
 
     print('XGB AUC: {}'.format(auc(xgb_instance, x_train, x_test, y_train, y_test)))
