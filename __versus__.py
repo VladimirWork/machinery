@@ -57,22 +57,22 @@ if __name__ == '__main__':
                                                         random_state=10,
                                                         test_size=0.25)
 
-    # xgb_instance = GeneralClassifier(xgboost.XGBClassifier(),
-    #                                  {'max_depth': [5, 10, 15],
-    #                                   'min_child_weight': [3, 6, 9],
-    #                                   'n_estimators': [200],
-    #                                   'learning_rate': [0.05, 0.1, 0.2]})(x_train, y_train)
-    # cb_instance = GeneralClassifier(catboost.CatBoostClassifier(),
-    #                                 {'depth': [5, 10, 15],
-    #                                  'learning_rate': [0.05, 0.1, 0.2],
-    #                                  'l2_leaf_reg': [3, 6, 9],
-    #                                  'iterations': [200]})(x_train, y_train)
+    xgb_instance = GeneralClassifier(xgboost.XGBClassifier(),
+                                     {'max_depth': [5, 10, 15],
+                                      'min_child_weight': [3, 6, 9],
+                                      'n_estimators': [200],
+                                      'learning_rate': [0.05, 0.1, 0.2]})(x_train, y_train)
+    cb_instance = GeneralClassifier(catboost.CatBoostClassifier(),
+                                    {'depth': [5, 10, 15],
+                                     'learning_rate': [0.05, 0.1, 0.2],
+                                     'l2_leaf_reg': [3, 6, 9],
+                                     'iterations': [200]})(x_train, y_train)
     lgbm_instance = GeneralClassifier(lightgbm.LGBMClassifier(),
                                       {'max_depth': [25, 50, 75],
                                        'learning_rate': [0.01, 0.05, 0.1],
                                        'num_leaves': [300, 900, 1200],
                                        'n_estimators': [200]})(x_train, y_train)
 
-    # print('XGB AUC: {}'.format(auc(xgb_instance, x_train, x_test, y_train, y_test)))
-    # print('CB AUC: {}'.format(auc(cb_instance, x_train, x_test, y_train, y_test)))
+    print('XGB AUC: {}'.format(auc(xgb_instance, x_train, x_test, y_train, y_test)))
+    print('CB AUC: {}'.format(auc(cb_instance, x_train, x_test, y_train, y_test)))
     print('LGBM AUC: {}'.format(auc(lgbm_instance, x_train, x_test, y_train, y_test)))
