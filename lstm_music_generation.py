@@ -11,7 +11,7 @@ from keras.callbacks import ModelCheckpoint
 # noinspection PyUnusedLocal
 def load_music_samples():
     _notes = []
-    for file in glob.glob('music_samples/*.mid'):
+    for file in glob.glob('music_samples_input/*.mid'):
         _midi = converter.parse(file)
         notes_to_parse = None
         parts = instrument.partitionByInstrument(_midi)
@@ -87,7 +87,7 @@ def train_model(model, network_input, network_output):
 def generate_notes(model, network_input, n_vocab, pitch_names, amount):
     start = np.random.randint(0, len(network_input) - 1)
     int_to_note = dict((number, _note) for number, _note in enumerate(pitch_names))
-    pattern = network_input[start]
+    pattern = list(network_input[start])
     _prediction_output = []  # predicted notes
     for note_index in range(amount):
         prediction_input = np.reshape(pattern, (1, len(pattern), 1))
@@ -145,8 +145,11 @@ if __name__ == '__main__':
     notes = load_music_samples()
     network_input, network_output, n_vocab, pitch_names = encode_and_map(notes)
     model = get_model(network_input, n_vocab)
-    model = train_model(model, network_input, network_output)
+    # model = train_model(model, network_input, network_output)
+    model.load_weights('weights-improvement-186-0.0711-bigger.hdf5')
     prediction_output = generate_notes(model, network_input, n_vocab, pitch_names, 500)
     output_notes = process_notes(prediction_output)
-    player = midi.realtime.StreamPlayer(output_notes)
+    midi_stream = stream.Stream(output_notes)
+    midi_stream.write('midi', fp='music_samples_output/test_output_19_04.mid')
+    player = midi.realtime.StreamPlayer(midi_stream)
     player.play()
