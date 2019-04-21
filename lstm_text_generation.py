@@ -4,6 +4,7 @@ import random
 import sys
 from utils import sample
 from vk_connector import main
+from keras.callbacks import ModelCheckpoint
 
 
 path = utils.get_file('nietzsche.txt', origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
@@ -46,26 +47,32 @@ model.add(layers.Dense(len(chars), activation='softmax'))
 optimizer = optimizers.RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
-# text generation loop
-for epoch in range(1, 30):
-    print('\nEpoch: {}\n'.format(epoch))
-    model.fit(x, y, batch_size=2048, epochs=1)
+if __name__ == '__main__':
+    _path = 'text_weights_{epoch:02d}_{loss:.4f}.hdf5'
+    checkpoint = ModelCheckpoint(
+        _path,
+        monitor='loss',
+        verbose=0,
+        save_best_only=True,
+        mode='min'
+    )
+    callbacks_list = [checkpoint]
+    model.load_weights('text_weights_25_1.1356.hdf5')
+    model.fit(x, y, batch_size=1024, epochs=25, callbacks=callbacks_list)
     start_index = random.randint(0, len(text) - max_len - 1)
     generated_text = text[start_index: start_index + max_len]
     print('\nGenerating with seed: "{}"\n'.format(generated_text))
     result = generated_text
     # sys.stdout.write(generated_text)
-    for i in range(1200):
+    for i in range(2000):
         sampled = np.zeros((1, max_len, len(chars)))
         for t, char in enumerate(generated_text):
             sampled[0, t, char_indices[char]] = 1.
         preds = model.predict(sampled, verbose=0)[0]
-        next_index = sample(preds, 1.0)
+        next_index = sample(preds, 0.5)
         next_char = chars[next_index]
         generated_text += next_char
         generated_text = generated_text[1:]
         result += next_char
         # sys.stdout.write(next_char)
-
-    if epoch > 20:
-        main(result, 'C:\\Users\\admin\\Downloads\\flowers.jpg')
+    main(result, 'C:\\Users\\admin\\Downloads\\storm.jpg')

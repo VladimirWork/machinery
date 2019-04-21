@@ -71,7 +71,7 @@ def get_model(network_input, n_vocab):
 
 
 def train_model(model, network_input, network_output):
-    path = "weights-improvement-{epoch:02d}-{loss:.4f}-bigger.hdf5"
+    path = 'music_weights_{epoch:02d}_{loss:.4f}.hdf5'
     checkpoint = ModelCheckpoint(
         path,
         monitor='loss',
@@ -145,11 +145,11 @@ if __name__ == '__main__':
     notes = load_music_samples()
     network_input, network_output, n_vocab, pitch_names = encode_and_map(notes)
     model = get_model(network_input, n_vocab)
-    # model = train_model(model, network_input, network_output)
     model.load_weights('weights-improvement-186-0.0711-bigger.hdf5')
+    model = train_model(model, network_input, network_output)
     prediction_output = generate_notes(model, network_input, n_vocab, pitch_names, 500)
     output_notes = process_notes(prediction_output)
     midi_stream = stream.Stream(output_notes)
-    midi_stream.write('midi', fp='music_samples_output/test_output_19_04.mid')
+    midi_stream.write('midi', fp='music_samples_output/test_output_21_04.mid')
     player = midi.realtime.StreamPlayer(midi_stream)
     player.play()
