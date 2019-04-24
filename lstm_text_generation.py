@@ -57,7 +57,7 @@ if __name__ == '__main__':
         mode='min'
     )
     callbacks_list = [checkpoint]
-    model.load_weights('text_weights_25_1.1356.hdf5')
+    model.load_weights('text_weights_24_1.1216.hdf5')
     model.fit(x, y, batch_size=1024, epochs=25, callbacks=callbacks_list)
     start_index = random.randint(0, len(text) - max_len - 1)
     generated_text = text[start_index: start_index + max_len]
