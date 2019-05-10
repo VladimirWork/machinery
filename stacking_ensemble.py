@@ -10,11 +10,11 @@ from matplotlib import pyplot
 from os import makedirs
 
 
-def fit_model(X, y):
+def fit_model(trainX, trainy):
     # define model
     model = Sequential()
-    model.add(Dense(25, input_dim=2, activation='relu'))
-    model.add(Dense(3, activation='softmax'))
+    model.add(Dense(64, input_dim=2, activation='relu'))
+    model.add(Dense(5, activation='softmax'))
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     # fit model
     model.fit(trainX, trainy, epochs=500, verbose=0)
@@ -51,7 +51,7 @@ def stacked_dataset(members, inputX):
 def fit_stacked_model(members, inputX, inputy):
     # create dataset using ensemble
     stackedX = stacked_dataset(members, inputX)
-    # fit standalone model
+    # fit stacked model
     # model = DecisionTreeClassifier()  # Stacked model accuracy: 1.000
     # model = ExtraTreeClassifier()  # Stacked model accuracy: 1.000
     # model = ExtraTreesClassifier()  # Stacked model accuracy: 1.000
@@ -71,7 +71,7 @@ def stacked_prediction(members, model, inputX):
 
 if __name__ == '__main__':
     # generate 2d classification dataset
-    X, y = make_blobs(n_samples=1100, centers=3, n_features=2, cluster_std=2, random_state=2)
+    X, y = make_blobs(n_samples=1100, centers=5, n_features=2, cluster_std=2, random_state=2)
     # one hot encode output variable
     y = to_categorical(y)
     # split into train and test
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     trainy, testy = y[:n_train], y[n_train:]
     print(trainX.shape, testX.shape)
 
-    n_members = 5
+    n_members = 10
     try:
         makedirs('models')
     except FileExistsError:
