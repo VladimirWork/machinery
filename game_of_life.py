@@ -50,8 +50,9 @@ def life_animation(x, dpi=10, frames=10, interval=300):
 
 if __name__ == '__main__':
     np.random.seed(0)
-    x = np.zeros((100, 200), dtype=bool)
-    r = np.random.random((100, 200))
+    x = np.zeros((300, 400), dtype=bool)
+    r = np.random.random((300, 400))
     x = (r > 0.75)
     a = life_animation(x, dpi=10, frames=100)
+    plt.get_current_fig_manager().window.state('zoomed')
     plt.show()
