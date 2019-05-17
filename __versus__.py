@@ -22,7 +22,7 @@ class GeneralClassifier:
         self.grid_search.fit(x_train, y_train)
         self.best_params = self.grid_search.best_params_
         print('Best params: {}'.format(self.best_params))
-        self.model = xgboost.XGBClassifier(**self.best_params)
+        self.model = self.model(**self.best_params)
         self.model.fit(x_train, y_train)
         return self.model
 
