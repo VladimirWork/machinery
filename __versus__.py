@@ -9,7 +9,7 @@ import pandas as pd
 
 class GeneralClassifier:
     def __init__(self, model, initial_params_deviation: dict):
-        self.model = model
+        self.model = model()
         self.initial_params_deviation = initial_params_deviation
         self.grid_search = GridSearchCV(self.model,
                                         param_grid=self.initial_params_deviation,
@@ -22,7 +22,7 @@ class GeneralClassifier:
         self.grid_search.fit(x_train, y_train)
         self.best_params = self.grid_search.best_params_
         print('Best params: {}'.format(self.best_params))
-        self.model = self.model(**self.best_params)
+        self.model = self.grid_search.best_estimator_
         self.model.fit(x_train, y_train)
         return self.model
 
@@ -57,20 +57,20 @@ if __name__ == '__main__':
                                                         random_state=10,
                                                         test_size=0.25)
 
-    xgb_instance = GeneralClassifier(xgboost.XGBClassifier(),
-                                     {'max_depth': [5, 10, 15],
-                                      'min_child_weight': [3, 6, 9],
+    xgb_instance = GeneralClassifier(xgboost.XGBClassifier,
+                                     {'max_depth': [5],
+                                      'min_child_weight': [3],
                                       'n_estimators': [200],
-                                      'learning_rate': [0.05, 0.1, 0.2]})(x_train, y_train)
-    cb_instance = GeneralClassifier(catboost.CatBoostClassifier(),
-                                    {'depth': [5, 10, 15],
-                                     'learning_rate': [0.05, 0.1, 0.2],
-                                     'l2_leaf_reg': [3, 6, 9],
+                                      'learning_rate': [0.05, 0.1]})(x_train, y_train)
+    cb_instance = GeneralClassifier(catboost.CatBoostClassifier,
+                                    {'depth': [5],
+                                     'learning_rate': [0.05, 0.1],
+                                     'l2_leaf_reg': [3],
                                      'iterations': [200]})(x_train, y_train)
-    lgbm_instance = GeneralClassifier(lightgbm.LGBMClassifier(),
-                                      {'max_depth': [25, 50, 75],
-                                       'learning_rate': [0.01, 0.05, 0.1],
-                                       'num_leaves': [300, 900, 1200],
+    lgbm_instance = GeneralClassifier(lightgbm.LGBMClassifier,
+                                      {'max_depth': [25],
+                                       'learning_rate': [0.01, 0.05],
+                                       'num_leaves': [300],
                                        'n_estimators': [200]})(x_train, y_train)
 
     print('XGB AUC: {}'.format(auc(xgb_instance, x_train, x_test, y_train, y_test)))
