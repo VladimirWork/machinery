@@ -27,9 +27,10 @@ if __name__ == '__main__':
     # midi_stream.insert(0, music21.instrument.ElectricBass())
     # midi_stream.insert(0, music21.instrument.AcousticBass())
     # midi_stream.insert(0, music21.instrument.Bass())
+
     midi_stream = open_midi('music_samples_input/FFIX_Piano.mid', True)
     midi_stream.plot('pianoroll')
-    midi_stream.plot('scatter', 'offset', 'pitchClass')
+    midi_stream.plot('3dbars')
     time_signature = midi_stream.getTimeSignatures()[0]
     music_analysis = midi_stream.analyze('key')
     print('Music time signature: {0}/{1}'.format(time_signature.beatCount, time_signature.denominator))
